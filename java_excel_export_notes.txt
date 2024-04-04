@@ -1,0 +1,72 @@
+/* Java Excel Export library list */
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+
+/* end of library list */
+
+
+/* Excel export Button */
+
+private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       
+        try{
+            
+            JFileChooser fileChooser=new JFileChooser();
+            fileChooser.showSaveDialog(this);
+            File saveFile=fileChooser.getSelectedFile();
+            
+            if(saveFile!=null){
+                
+                saveFile=new File(saveFile.toString()+".xlsx");
+                Workbook wb=new XSSFWorkbook();
+                Sheet sheet=wb.createSheet("orders");
+                
+                Row rowCol=sheet.createRow(0);
+                for(int i=0;i<jTable1.getColumnCount();i++){
+                    Cell cell=rowCol.createCell(i);
+                    cell.setCellValue(jTable1.getColumnName(i));
+                }
+                
+                for(int j=0;j<jTable1.getRowCount();j++){
+                    
+                    Row row=sheet.createRow(j);
+                    for(int k=0;k<jTable1.getColumnCount();k++){
+                        Cell cell=row.createCell(k);
+                        if(jTable1.getValueAt(j, k)!=null){
+                            cell.setCellValue(jTable1.getValueAt(j, k).toString());
+                        }
+                    }
+                    
+                }
+                
+                FileOutputStream out=new FileOutputStream(new File(saveFile.toString()));
+                
+                wb.write(out);
+                wb.close();
+                out.close();
+                
+             
+                JOptionPane.showMessageDialog(null, "File Saved...");
+                
+            }
+            else{
+                //JOptionPane.showMessageDialog(null, "File Not Saved...");
+            }
+            
+            
+        }
+        catch(FileNotFoundException ex1){
+            ex1.printStackTrace();
+        }
+        catch(IOException ex2){
+            ex2.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+
+/* end of Excel Export Button */
+
