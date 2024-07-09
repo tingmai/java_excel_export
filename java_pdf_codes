@@ -1,0 +1,44 @@
+
+
+Document document = new Document(PageSize.A4.rotate());
+        try {
+            PdfWriter writer =
+            PdfWriter.getInstance(document, new FileOutputStream("jTable.pdf"));
+            
+            document.open();
+            PdfContentByte cb = writer.getDirectContent();
+            
+            // Create the graphics as shapes
+            cb.saveState();
+            Graphics2D g2 = cb.createGraphicsShapes(500, 500);
+            // Print the table to the graphics
+            Shape oldClip = g2.getClip();
+            g2.clipRect(0, 0, 500, 500);
+            table.print(g2);
+            g2.setClip(oldClip);
+            
+            g2.dispose();
+            cb.restoreState();
+            
+            document.newPage();
+            
+            // Create the graphics with pdf fonts
+            cb.saveState();
+            g2 = cb.createGraphics(500, 500);
+            
+            // Print the table to the graphics
+            oldClip = g2.getClip();
+            g2.clipRect(0, 0, 500, 500);
+            table.print(g2);
+            g2.setClip(oldClip);
+            
+            g2.dispose();
+            cb.restoreState();
+            
+        } catch (Exception e) {
+        	e.printStackTrace();
+            System.err.println(e.getMessage());
+        }
+        
+        document.close();
+    }
