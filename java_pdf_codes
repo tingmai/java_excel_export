@@ -1,44 +1,110 @@
+===========================================================
+/*PDF Library List */
+
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.GrayColor;
+import com.lowagie.text.pdf.PdfContentByte;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 
 
-Document document = new Document(PageSize.A4.rotate());
-        try {
-            PdfWriter writer =
-            PdfWriter.getInstance(document, new FileOutputStream("jTable.pdf"));
+
+
+======================================================
+
+
+/* global declaration
+
+//PDF file saving 
+public Document document = new Document(PageSize.A4.rotate());
+
+/*Export Button */
+-----------------------
+
+try{
             
-            document.open();
-            PdfContentByte cb = writer.getDirectContent();
+             //set location to save file
+            JFileChooser fileChooser=new JFileChooser();
+            fileChooser.showSaveDialog(this);
+            File saveFile=fileChooser.getSelectedFile();
             
-            // Create the graphics as shapes
-            cb.saveState();
-            Graphics2D g2 = cb.createGraphicsShapes(500, 500);
-            // Print the table to the graphics
-            Shape oldClip = g2.getClip();
-            g2.clipRect(0, 0, 500, 500);
-            table.print(g2);
-            g2.setClip(oldClip);
-            
-            g2.dispose();
-            cb.restoreState();
-            
-            document.newPage();
-            
-            // Create the graphics with pdf fonts
-            cb.saveState();
-            g2 = cb.createGraphics(500, 500);
-            
-            // Print the table to the graphics
-            oldClip = g2.getClip();
-            g2.clipRect(0, 0, 500, 500);
-            table.print(g2);
-            g2.setClip(oldClip);
-            
-            g2.dispose();
-            cb.restoreState();
-            
-        } catch (Exception e) {
-        	e.printStackTrace();
-            System.err.println(e.getMessage());
-        }
+            if(saveFile!=null){
+                
+                
+                try {
+                    PdfWriter writer =
+                    PdfWriter.getInstance(document, new FileOutputStream(saveFile+".pdf"));
+
+                    document.open();
+                     PdfPTable pdfTable = new PdfPTable(jTable1.getColumnCount());
+                   
+                     addData(pdfTable);
+  
+
+                } catch (Exception e) {
+                        e.printStackTrace();
+                    System.err.println(e.getMessage());
+                }
+
+              document.close();
+       
+              JOptionPane.showMessageDialog(null, "File Saved...");
+                
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "File Not Saved...");
+            }
+
+
+
+
+============================
+/* Table Data Saving Proccess */
+===================================
+
+ try{
+         pdfTable.setHeaderRows(1);
+
+        PdfPCell cell = new PdfPCell(new Paragraph(jTable1.getColumnName(0)));
+        cell.setBackgroundColor(new GrayColor(0.7f));
+        pdfTable.addCell(cell);
+
+        cell = new PdfPCell(new Paragraph(jTable1.getColumnName(1)));
+        cell.setBackgroundColor(new GrayColor(0.7f));
+        pdfTable.addCell(cell);
+
+        cell = new PdfPCell(new Paragraph(jTable1.getColumnName(2)));
+        cell.setBackgroundColor(new GrayColor(0.7f));
+        pdfTable.addCell(cell);
         
-        document.close();
-    }
+        cell = new PdfPCell(new Paragraph(jTable1.getColumnName(3)));
+        cell.setBackgroundColor(new GrayColor(0.7f));
+        pdfTable.addCell(cell);
+        
+        cell = new PdfPCell(new Paragraph(jTable1.getColumnName(4)));
+        cell.setBackgroundColor(new GrayColor(0.7f));
+        pdfTable.addCell(cell);
+        
+        cell = new PdfPCell(new Paragraph(jTable1.getColumnName(5)));
+        cell.setBackgroundColor(new GrayColor(0.7f));
+        pdfTable.addCell(cell);
+
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            for (int j = 0; j < jTable1.getColumnCount(); j++) {
+                pdfTable.addCell(jTable1.getModel().getValueAt(i, j).toString());
+            }
+        }
+
+        document.add(pdfTable);
+        }
+        catch(Exception e3){
+              e3.printStackTrace();
+         }
+
+
+
+
